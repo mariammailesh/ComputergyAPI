@@ -10,5 +10,7 @@
         public string? Nationality { get; set; }
         public string? Address { get; set; }
         public string? ProfileImage { get; set; }
+        public DateTime? LastLoginTime { get; set; }
+        public bool IsLogedIn { get; set; } = false;
     }
 }
