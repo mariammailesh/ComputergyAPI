@@ -22,9 +22,14 @@ namespace ComputergyAPI.Services
             throw new NotImplementedException();
         }
 
-        public Task<string> SignIn(SignInInputDTO input)
+        public async Task<string> SignIn(SignInInputDTO input)
         {
-            throw new NotImplementedException();
+            var user = _computergyDbContext.Persons.Where(u=>u.Email == input.Email && u.Password == input.Password).SingleOrDefault();
+            if (user == null) {
+                return "User not found";
+            }
+
+            return "Token!";
         }
 
         public Task<bool> SignOut(int userId)
