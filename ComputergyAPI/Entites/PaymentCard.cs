@@ -8,5 +8,8 @@
         public string ExpirationDate { get; set; }
         public string CVC { get; set; }
         public int UserId { get; set; }
+
+
+
     }
 }
