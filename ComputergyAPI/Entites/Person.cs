@@ -12,5 +12,7 @@
         public string? ProfileImage { get; set; }
         public DateTime? LastLoginTime { get; set; }
         public bool IsLogedIn { get; set; } = false;
+        public string? OTP { get; set; }
+        public DateTime? ExpireOTP { get; set; }
     }
 }

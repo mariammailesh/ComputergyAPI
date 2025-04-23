@@ -12,9 +12,26 @@ namespace ComputergyAPI.Services
         {
             _computergyDbContext = computergyDbContext;
         }
-        public Task<bool> ResetPersonPassword(ResetPersonPasswordInputDTO input)
+        public async Task<bool> ResetPersonPassword(ResetPersonPasswordInputDTO input)
         {
-            throw new NotImplementedException();
+            var user = _computergyDbContext.Persons.Where(u => u.Email == input.Email && u.OTP == input.OTP
+            && u.IsLogedIn == false && u.ExpireOTP>DateTime.Now).SingleOrDefault();
+            if (user == null)
+            {
+                return false;
+            }
+            if (input.Password!=input.ConfirmPassword)
+            {
+                return false;
+            }
+            user.Password= input.ConfirmPassword;
+            user.OTP = null;
+            user.ExpireOTP = null;
+            
+            _computergyDbContext.Update(user);
+            _computergyDbContext.SaveChanges();
+
+            return true;
         }
 
         public Task<bool> SendOTP(string email)
