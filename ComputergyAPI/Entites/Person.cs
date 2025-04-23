@@ -15,5 +15,6 @@
         public bool IsLogedIn { get; set; } = false;
         public string? OTP { get; set; }
         public DateTime? ExpireOTP { get; set; }
+        public bool IsVerified { get; set; } = false;
     }
 }
