@@ -17,9 +17,22 @@ namespace ComputergyAPI.Services
             throw new NotImplementedException();
         }
 
-        public Task<bool> SendOTP(string email)
+        public async Task<bool> SendOTP(string email)
         {
-            throw new NotImplementedException();
+            var user = _computergyDbContext.Persons.Where(u => u.Email == email && u.IsLogedIn == false).SingleOrDefault();
+            if (user == null)
+            {
+                return false;
+            }
+            Random otp = new Random();
+            user.OTP = otp.Next(11111, 99999).ToString();
+            user.ExpireOTP = DateTime.Now.AddMinutes(3);
+            //send otp via email
+
+            _computergyDbContext.Update(user);
+            _computergyDbContext.SaveChanges();
+
+            return true;
         }
 
         public async Task<string> SignIn(SignInInputDTO input)

@@ -12,10 +12,9 @@
         public string? ProfileImage { get; set; }
         public DateTime? LastLoginTime { get; set; }
         public string UserType { get; set; } = "Client";
-
+        public bool IsLogedIn { get; set; } = false;
         public string? OTP { get; set; }
         public DateTime? ExpireOTP { get; set; }
-        public bool IsLogedIn { get; set; } = false;
         public bool IsVerified { get; set; } = false;
     }
 }
