@@ -11,6 +11,7 @@
         public string? Address { get; set; }
         public string? ProfileImage { get; set; }
         public DateTime? LastLoginTime { get; set; }
+        public string UserType { get; set; } = "Client";
         public bool IsLogedIn { get; set; } = false;
     }
 }
