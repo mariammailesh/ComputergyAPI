@@ -8,6 +8,8 @@ namespace ComputergyAPI.Migrations
     public partial class AddUserTypeToPerson : Migration
     {
         /// <inheritdoc />
+        /// 
+
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
