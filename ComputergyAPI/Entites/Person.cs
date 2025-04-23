@@ -13,5 +13,7 @@
         public DateTime? LastLoginTime { get; set; }
         public string UserType { get; set; } = "Client";
         public bool IsLogedIn { get; set; } = false;
+        public string? OTP { get; set; }
+        public DateTime? ExpireOTP { get; set; }
     }
 }
