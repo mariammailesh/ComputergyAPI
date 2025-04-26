@@ -1,5 +1,15 @@
 using ComputergyAPI;
 using ComputergyAPI.Contexts;
+using ComputergyAPI.Interfaces;
+using ComputergyAPI.Services;
+using Microsoft.EntityFrameworkCore;
+using ComputergyAPI.Interfaces;
+using ComputergyAPI.Services;
+
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
 using ComputergyAPI.Services;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -31,6 +41,35 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+builder = WebApplication.CreateBuilder(args);
+
+// Add services to container
+builder.Services.AddScoped<IAuthanication, AuthanicationService>();
+builder.Services.AddDbContext<ComputergyDbContext>(option => option.UseSqlServer("Data Source=DESKTOP-E4L6533\\SQLEXPRESS;Initial Catalog=ComputergyDb;Integrated Security=True;Encrypt=True;Trust Server Certificate=True"));
+
+// JWT Authentication
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        var key = builder.Configuration["JWT:Key"];
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidIssuer = builder.Configuration["JWT:IssuerIP"],
+            ValidAudience = builder.Configuration["JWT:AudienceIP"],
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+
+builder.Services.AddAuthorization();
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddDbContext<ComputergyDbContext>(option => option.UseSqlServer("Data Source=DESKTOP-E4L6533\\SQLEXPRESS;Initial Catalog=ComputergyDb;Integrated Security=True;Encrypt=True;Trust Server Certificate=True"));
 
 
@@ -44,6 +83,7 @@ foreach (var service in builder.Services)
     Log.Information($"Service Registered: {service.ServiceType.FullName} -> {service.ImplementationType?.FullName}");
 }
 builder.Services.AddScoped<IProducts, ProductsService>();
+
 var app = builder.Build();
 
 // Configure Middleware
@@ -52,7 +92,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseHttpsRedirection();
 app.UseMiddleware<ExceptionLoggingMiddleware>();
 app.UseAuthorization();
