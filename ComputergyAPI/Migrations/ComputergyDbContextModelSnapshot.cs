@@ -57,6 +57,9 @@ namespace ComputergyAPI.Migrations
                     b.Property<bool>("IsLogedIn")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("LastLoginTime")
                         .HasColumnType("datetime2");
 
@@ -92,7 +95,7 @@ namespace ComputergyAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Persons");
+                    b.ToTable("Persons", (string)null);
                 });
 #pragma warning restore 612, 618
         }

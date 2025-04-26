@@ -2,6 +2,7 @@
 using ComputergyAPI.Helpers;
 using ComputergyAPI.Models;
 
+
 namespace ComputergyAPI.Controllers
 {
     [ApiController]
@@ -28,4 +29,16 @@ namespace ComputergyAPI.Controllers
             return Ok(new { IsMatch = isMatch });
         }
     }
+
+    public class TestController
+    {
+
+        [HttpGet("error")]
+        public IActionResult GenerateError()
+        {
+            throw new Exception("Test exception for logging!");
+        }
+
+    }
+
 }
