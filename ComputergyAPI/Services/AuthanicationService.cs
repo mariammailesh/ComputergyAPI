@@ -8,9 +8,12 @@ namespace ComputergyAPI.Services
     public class AuthanicationService : IAuthanication
     {
         private readonly ComputergyDbContext _computergyDbContext;
-        public AuthanicationService(ComputergyDbContext computergyDbContext)
+        private readonly ITokenProvider _tokenProvider;
+        public AuthanicationService(ComputergyDbContext computergyDbContext, ITokenProvider tokenProvider)
         {
             _computergyDbContext = computergyDbContext;
+            _tokenProvider = tokenProvider;
+
         }
         public async Task<bool> ResetPersonPassword(ResetPersonPasswordInputDTO input)
         {
@@ -68,9 +71,7 @@ namespace ComputergyAPI.Services
             _computergyDbContext.Update(user);
             _computergyDbContext.SaveChanges(); 
 
-            
-            
-            return "Check your emnail OTP has been sent!";
+            return "Check your email OTP has been sent!";
         }
 
         public async Task<bool> SignOut(int userId)
@@ -135,10 +136,9 @@ namespace ComputergyAPI.Services
 
             _computergyDbContext.Update(user);
             _computergyDbContext.SaveChanges();
+            string jwtToken = _tokenProvider.CreateToken(user);
 
-
-
-            return "Token!";
+            return jwtToken;
         }
     }
 }
