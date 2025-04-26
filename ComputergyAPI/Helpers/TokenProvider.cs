@@ -5,9 +5,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
 
-namespace ComputergyAPI.Services
+namespace ComputergyAPI.Helpers
 {
-    public class TokenProvider:ITokenProvider
+    public class TokenProvider : ITokenProvider
     {
         private readonly IConfiguration _configuration;
 
