@@ -6,14 +6,14 @@ namespace ComputergyAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ServicesController : ControllerBase
+    public class CartController : ControllerBase
     {
         private readonly ComputergyDbContext _computergyDbContext;
-        public ServicesController(ComputergyDbContext computergyDbContext)
+        public CartController(ComputergyDbContext computergyDbContext)
         {
             _computergyDbContext = computergyDbContext;
         }
 
-        [Htt]
+        
     }
 }
