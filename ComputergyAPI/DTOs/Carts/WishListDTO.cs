@@ -1,9 +1,8 @@
-﻿namespace ComputergyAPI.Entites
+﻿namespace ComputergyAPI.DTOs.Carts
 {
-    public class Wishlist:MainEntity
+    public class WishListDTO
     {
         public int ItemsID { get; set; }
         public int ClientId { get; set; }
-        
     }
 }
