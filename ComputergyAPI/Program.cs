@@ -38,7 +38,7 @@ foreach (var service in builder.Services)
 {
     Log.Information($"Service Registered: {service.ServiceType.FullName} -> {service.ImplementationType?.FullName}");
 }
-
+builder.Services.AddScoped<IProducts, ProductsService>();
 var app = builder.Build();
 
 // Configure Middleware
