@@ -14,5 +14,6 @@
         public int LimitUser { get; set; }
 
         public float LimitAmount { get; set; }
+
     }
 }
