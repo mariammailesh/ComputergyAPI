@@ -21,7 +21,6 @@ namespace ComputergyAPI.Repositories.Implementations
         public async Task AddAsync(T entity)
         {
            await  _dbSet.AddAsync(entity);
-            _dbSet.Update(entity);
             await _context.SaveChangesAsync();
 
 
@@ -56,15 +55,15 @@ namespace ComputergyAPI.Repositories.Implementations
         public async Task<bool> IsExistsAsync(int id)
         {
             var targetObj = await GetByIdAsync(id);
-            return targetObj is null;
+            return targetObj is not null;
 
         }
 
-        public async Task<List<T>> SearchAsync<T>(string keyword) where T : class
+        public async Task<List<T>> SearchAsync(string keyword) 
         {
             List<T> result = new List<T>();
 
-            var objects = await _dbSet.OfType<T>().ToListAsync(); 
+            var objects = await _dbSet.ToListAsync(); 
 
             foreach (var obj in objects)
             {
