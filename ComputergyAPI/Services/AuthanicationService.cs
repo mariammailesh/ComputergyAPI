@@ -11,6 +11,13 @@ namespace ComputergyAPI.Services
     public class AuthanicationService : IAuthanication
     {
         private readonly ComputergyDbContext _computergyDbContext;
+        private readonly ITokenProvider _tokenProvider;
+        public AuthanicationService(ComputergyDbContext computergyDbContext, ITokenProvider tokenProvider)
+        {
+            _computergyDbContext = computergyDbContext;
+            _tokenProvider = tokenProvider;
+
+
         private readonly IConfiguration _configuration;
         private readonly SymmetricSecurityKey _key;
         private readonly GenerateJwtToken _jwtTokenGenerator;
@@ -19,6 +26,7 @@ namespace ComputergyAPI.Services
         {
             _computergyDbContext = computergyDbContext;
             _jwtTokenGenerator = new GenerateJwtToken(configuration);
+
         }
 
         public async Task<bool> ResetPersonPassword(ResetPersonPasswordInputDTO input)
@@ -79,9 +87,11 @@ namespace ComputergyAPI.Services
             _computergyDbContext.Update(user);
             _computergyDbContext.SaveChanges();
 
-            // Generate JWT Token immediately
+            return "Check your email OTP has been sent!";
+
             var token = _jwtTokenGenerator.CreateToken(user);
             return token;
+
         }
 
         public async Task<bool> SignOut(int userId)
@@ -148,10 +158,9 @@ namespace ComputergyAPI.Services
 
             _computergyDbContext.Update(user);
             _computergyDbContext.SaveChanges();
+            string jwtToken = _tokenProvider.CreateToken(user);
 
-
-
-            return "Token!";
+            return jwtToken;
         }
     }
 }

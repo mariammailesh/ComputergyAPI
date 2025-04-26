@@ -1,9 +1,17 @@
 using ComputergyAPI;
 using ComputergyAPI.Contexts;
+
+using ComputergyAPI.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
 using ComputergyAPI.Interfaces;
 using ComputergyAPI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -106,6 +114,27 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ComputergyDbContext>(option => option.UseSqlServer("Data Source=DESKTOP-E4L6533\\SQLEXPRESS;Initial Catalog=ComputergyDb;Integrated Security=True;Encrypt=True;Trust Server Certificate=True"));
 
+builder.Services.AddSingleton<TokenProvider>();
+// Add Authentication with JWT
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = false; // for development
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]!)),
+            ClockSkew = TimeSpan.Zero // No extra time allowed after expiration
+        };
+
+
 
 builder.Services.AddDbContext<ComputergyDbContext>(option =>
     option.UseSqlServer("Data Source=DESKTOP-E4L6533\\SQLEXPRESS;Initial Catalog=ComputergyDb;Integrated Security=True;Encrypt=True;Trust Server Certificate=True")
@@ -117,6 +146,7 @@ foreach (var service in builder.Services)
     Log.Information($"Service Registered: {service.ServiceType.FullName} -> {service.ImplementationType?.FullName}");
 }
 builder.Services.AddScoped<IProducts, ProductsService>();
+
 
 var app = builder.Build();
 
@@ -131,6 +161,10 @@ app.UseAuthorization();
 app.UseHttpsRedirection();
 app.UseMiddleware<ExceptionLoggingMiddleware>();
 app.UseAuthorization();
+
+app.UseAuthentication();
+
+
 app.MapControllers();
 
 // Optional final log (app started)
