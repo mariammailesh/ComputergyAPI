@@ -1,7 +1,9 @@
 ﻿using ComputergyAPI.Contexts;
 using ComputergyAPI.DTOs.Products;
 using ComputergyAPI.Interfaces;
+using ComputergyAPI.Mappings;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace ComputergyAPI.Services
@@ -15,7 +17,16 @@ namespace ComputergyAPI.Services
         }
         public async Task<ProductDTO> CreateProduct(ProductCreateDTO dto)
         {
-            throw new Exception("Product not found.");
+            // take input from user
+            // convert the ProductCreateDTO to Product
+            // add the entity to the dbset
+            // save changes
+
+            var added = dto.ToProduct();
+            await _computergyDbContext.Products.AddAsync(added);
+            await _computergyDbContext.SaveChangesAsync();
+
+            return added.ToProductDTO();
         }
         public async Task<bool> RemoveProduct(int id)
         {
@@ -23,17 +34,23 @@ namespace ComputergyAPI.Services
         }
         public async Task<ProductDTO> UpdateProduct(ProductUpdateDTO dto)
         {
-            throw new Exception("Product not found.");
+            var product = _computergyDbContext.Products.Where(x => x.Id == dto.Id).FirstOrDefault();
+           
+            product.ProductName= dto.ProductName;
+            product.ProductDescription= dto.ProductDescription;
+            product.Price=dto.Price;
+            product.ImageUrl= dto.ImageUrl;
+            product.Quantity=dto.Quantity;
+            product.Category=dto.Category;
+            product.Brand=dto.Brand;
+            
+            await _computergyDbContext.SaveChangesAsync();
+            return product.ToProductDTO();
         }
         public async Task<List<ProductDTO>> GetAllProducts()
         { 
-          return _computergyDbContext.Products.Select(x=> new ProductDTO()
-          {
-              Id = x.Id,
-          }
-          ).ToList();
+          return await _computergyDbContext.Products.Select(x=> x.ToProductDTO()).ToListAsync();
 
-         
         }
         public async Task<ProductDTO?> GetOneProduct(int id)
         {

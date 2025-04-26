@@ -21,5 +21,19 @@ namespace ComputergyAPI.Mappings
                 Brand = entity.Brand
             };
         }
+
+        public static Product ToProduct(this ProductCreateDTO entity)
+        {
+            return new Product ()
+            {
+                ProductName = entity.ProductName,
+                ProductDescription = entity.ProductDescription,
+                Price = entity.Price,
+                ImageUrl = entity.ImageUrl,
+                Quantity = entity.Quantity,
+                Category = entity.Category,
+                Brand = entity.Brand
+            };
+        }
     }
 }
