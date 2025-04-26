@@ -32,6 +32,7 @@ namespace ComputergyAPI.Controllers
                 return BadRequest(new
                 {
                     Message = ex.Message
+                    //example
                 });
             }
         }
