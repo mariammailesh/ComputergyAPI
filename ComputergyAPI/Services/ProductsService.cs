@@ -46,23 +46,17 @@ namespace ComputergyAPI.Services
             {
                 return null;
             }
-            product.ProductName= dto.ProductName;
-            product.ProductDescription= dto.ProductDescription;
-            product.Price=dto.Price;
-            product.ImageUrl= dto.ImageUrl;
-            product.Quantity=dto.Quantity;
-            product.Category=dto.Category;
-            product.Brand=dto.Brand;
-            
+            product.ProductName = dto.ProductName;
+            product.ProductDescription = dto.ProductDescription;
+            product.Price = dto.Price;
+            product.ImageUrl = dto.ImageUrl;
+            product.Quantity = dto.Quantity;
+            product.Category = dto.Category;
+            product.Brand = dto.Brand;
+
             await _computergyDbContext.SaveChangesAsync();
             return product.ToProductDTO();
         }
-<<<<<<< HEAD
-        public async Task<List<ProductDTO>> GetAllProducts()
-        { 
-          return await _computergyDbContext.Products.Select(x=> x.ToProductDTO()).ToListAsync();
-
-=======
         public async Task<List<ProductDTO>> GetAllProducts(PaginationParameters pagination)
         {
             return await _computergyDbContext
@@ -72,7 +66,6 @@ namespace ComputergyAPI.Services
               .Take(pagination.PageSize)
               .Select(p => p.ToProductDTO())
               .ToListAsync();
->>>>>>> fbd8509 (Add pagination support for GetAllProducts and add ProductController)
         }
         public async Task<ProductDTO?> GetOneProduct(int id)
         {
