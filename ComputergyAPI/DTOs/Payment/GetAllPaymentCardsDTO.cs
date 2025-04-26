@@ -1,10 +1,7 @@
-﻿using ComputergyAPI.Entites;
-
-namespace ComputergyAPI.DTOs.Payment
+﻿namespace ComputergyAPI.DTOs.Payment
 {
-    public class CardDTO
+    public class GetAllPaymentCardsDTO
     {
-        public int Id { get; set; }
         public string? CardNumber { get; set; }
         public string? CardHolder { get; set; }
         public string? ExpirationDate { get; set; }

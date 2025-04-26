@@ -58,7 +58,7 @@ namespace ComputergyAPI.Services
             }
         }
 
-        public async Task<List<CreateUpdatePaymentCardDTO>> GetAll(int userId)
+        public async Task<List<GetAllPaymentCardsDTO>> GetAll(int userId)
         {
             try
             {
@@ -68,7 +68,7 @@ namespace ComputergyAPI.Services
                     .Where(x => x.UserId == userId)
                     .ToListAsync();
 
-                var paymentDtos = cards.Select(card => new CreateUpdatePaymentCardDTO
+                var paymentDtos = cards.Select(card => new GetAllPaymentCardsDTO
                 {
                     UserId = card.UserId,
                     CardHolder = card.CardHolder,

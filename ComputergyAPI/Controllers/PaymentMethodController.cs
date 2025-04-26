@@ -23,7 +23,7 @@ namespace ComputergyAPI.Controllers
             return Ok(result);
         }
 
-        [HttpGet("user/{userId}")]
+        [HttpGet("GetAllPaymentCards")]
         public async Task<IActionResult> GetAllPaymentCards(int userId)
         {
             var result = await _paymentService.GetAll(userId);
