@@ -76,7 +76,8 @@ namespace ComputergyAPI.Repositories.Implementations
                         if (!string.IsNullOrEmpty(value) && value.Contains(keyword, StringComparison.OrdinalIgnoreCase))
                         {
                             result.Add(obj);
-                            break;                        }
+                            break;             
+                        }
                     }
                 }
             }
@@ -89,8 +90,11 @@ namespace ComputergyAPI.Repositories.Implementations
 
         public async Task<bool> UpdateAsync<T>(T entity)
         {
-            var existingObj = await GetByIdAsync(Convert.ToInt32(entity.GetType().GetProperty("Id")));
-            if(existingObj is null)
+            var idProp = entity.GetType().GetProperty("Id");
+            var id = (int)idProp.GetValue(entity);
+            var existingObj = await GetByIdAsync(id);
+
+            if (existingObj is null)
             {
                 throw new Exception("Doesn't Exists");
             }
