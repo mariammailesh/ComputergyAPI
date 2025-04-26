@@ -1,6 +1,7 @@
 ﻿using ComputergyAPI.Contexts;
 using ComputergyAPI.DTOs.Products;
 using ComputergyAPI.Interfaces;
+using Microsoft.AspNetCore.Http.HttpResults;
 using System;
 
 namespace ComputergyAPI.Services
@@ -24,9 +25,15 @@ namespace ComputergyAPI.Services
         {
             throw new Exception("Product not found.");
         }
-        public async Task<ProductDTO> GetAllProducts()
+        public async Task<List<ProductDTO>> GetAllProducts()
         { 
-            throw new Exception("Product not found.");
+          return _computergyDbContext.Products.Select(x=> new ProductDTO()
+          {
+              Id = x.Id,
+          }
+          ).ToList();
+
+         
         }
         public async Task<ProductDTO> GetOneProduct(int id)
         { 
