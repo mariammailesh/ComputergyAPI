@@ -8,5 +8,6 @@
         public string? ImageUrl { get; set; }
         public string Category { get; set; }
         public string Brand { get; set; }
+        //public string r 
     }
 }
