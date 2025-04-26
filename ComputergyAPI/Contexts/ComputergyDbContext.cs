@@ -14,6 +14,7 @@ namespace ComputergyAPI.Contexts
         }
         public DbSet<Person> Persons { get; set; } // configure - mark person class as table in database
         public DbSet<Order> Orders { get; set; }
+        public DbSet<Rate> Rate { get; set; }
         public DbSet<Discount> Discount { get; set; }
         public DbSet<Product> Products { get; set; }
 
