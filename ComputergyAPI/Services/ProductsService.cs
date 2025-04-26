@@ -32,10 +32,13 @@ namespace ComputergyAPI.Services
         {
             throw new Exception("Product not found.");
         }
-        public async Task<ProductDTO> UpdateProduct(ProductUpdateDTO dto)
+        public async Task<ProductDTO?> UpdateProduct(ProductUpdateDTO dto)
         {
             var product = _computergyDbContext.Products.Where(x => x.Id == dto.Id).FirstOrDefault();
-           
+            if (product == null)
+            {
+                return null;
+            }
             product.ProductName= dto.ProductName;
             product.ProductDescription= dto.ProductDescription;
             product.Price=dto.Price;
