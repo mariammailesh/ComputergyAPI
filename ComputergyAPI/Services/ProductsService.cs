@@ -5,6 +5,7 @@ using ComputergyAPI.Mappings;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using System;
+using ComputergyAPI.DTOs;
 
 namespace ComputergyAPI.Services
 {
@@ -56,10 +57,22 @@ namespace ComputergyAPI.Services
             await _computergyDbContext.SaveChangesAsync();
             return product.ToProductDTO();
         }
+<<<<<<< HEAD
         public async Task<List<ProductDTO>> GetAllProducts()
         { 
           return await _computergyDbContext.Products.Select(x=> x.ToProductDTO()).ToListAsync();
 
+=======
+        public async Task<List<ProductDTO>> GetAllProducts(PaginationParameters pagination)
+        {
+            return await _computergyDbContext
+              .Products
+              .AsQueryable()
+              .Skip((pagination.PageNumber - 1) * pagination.PageSize)
+              .Take(pagination.PageSize)
+              .Select(p => p.ToProductDTO())
+              .ToListAsync();
+>>>>>>> fbd8509 (Add pagination support for GetAllProducts and add ProductController)
         }
         public async Task<ProductDTO?> GetOneProduct(int id)
         {
