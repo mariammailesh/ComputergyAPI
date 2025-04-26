@@ -14,6 +14,7 @@ namespace ComputergyAPI.Contexts
         }
         public DbSet<Person> Persons { get; set; } // configure - mark person class as table in database
         public DbSet<Order> Orders { get; set; }
+        public DbSet<PaymentCard> PaymentCards { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
