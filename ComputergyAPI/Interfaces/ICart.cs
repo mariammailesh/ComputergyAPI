@@ -10,9 +10,9 @@ namespace ComputergyAPI.Interfaces
         Task<string> CreateCart(int personId);
         Task<string> AddUpdateCart(CartItemDTO itemDTO);
         Task<string> RemoveFromCart(int CartitemId);
-        Task<string> DeleteWishlist();
-        Task<string> CreateWishlist();
-        Task<string> AddToWishlist(int itemId);
+        Task<string> DeleteWishlist(int personId);
+        Task<string> CreateWishlist(int personId);
+        Task<string> AddToWishlist(WishListDTO wishListDTO);
         Task<string> RemoveFromWishlist(int itemId);
     }
 }
