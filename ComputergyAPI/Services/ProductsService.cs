@@ -30,7 +30,13 @@ namespace ComputergyAPI.Services
         }
         public async Task<bool> RemoveProduct(int id)
         {
-            throw new Exception("Product not found.");
+            var existing = await _computergyDbContext.Products.FindAsync(id);
+            if (existing is null)
+                return false;
+
+            _computergyDbContext.Products.Remove(existing);
+            await _computergyDbContext.SaveChangesAsync();
+            return true;
         }
         public async Task<ProductDTO?> UpdateProduct(ProductUpdateDTO dto)
         {
@@ -60,19 +66,16 @@ namespace ComputergyAPI.Services
             var existing = await _computergyDbContext.Products.FindAsync(id);
             if (existing is null)
                 return null;
-            return new ProductDTO()
-            {
-                Id = existing.Id,
-                ProductName = existing.ProductName,
-                Price = existing.Price,
-                ImageUrl = existing.ImageUrl,
-                Category = existing.Category,
-                Brand = existing.Brand
-            };
+            return existing.ToProductDTO();
         }
-        public async Task<ProductDTO> SearchProduct(SearchInputProductsDTO input)
+        public async Task<List<ProductDTO>> SearchProduct(SearchInputProductsDTO input)
         {
-            throw new Exception("Product not found.");
+            return await _computergyDbContext
+                .Products
+                .AsQueryable()
+                .Where(p => p.ProductName.Contains(input.Name, StringComparison.OrdinalIgnoreCase))
+                .Select(p => p.ToProductDTO())
+                .ToListAsync();
         }
     }
 }
