@@ -1,26 +1,26 @@
-﻿using ComputergyAPI.DTOs.Payment;
+﻿using ComputergyAPI.DTOs.Order;
 using ComputergyAPI.Interfaces;
 
 namespace ComputergyAPI.Services
 {
-    public class PaymentServece : IPayment
+    public class OrderService : IOrder
     {
-        public Task<bool> CreatUpdatePaymentCard(CreatUpdatePaymentCardDTO input)
+        public Task<string> CreateUpdateOrder(CreateUpdateOrderInputDTO input)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<PaymentDTO>> GetAll(int UserId)
+        public Task<string> DeleteOrder(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<PaymentDTO> GetPaymentCard(int CardId)
+        public Task<OrderDTO> GetAllOrder()
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> RemovePaymentCard(int CardId)
+        public Task<OrderDTO> SearchOrder(SearchOrderInputDTO input)
         {
             throw new NotImplementedException();
         }
