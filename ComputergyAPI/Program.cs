@@ -23,7 +23,7 @@ builder = WebApplication.CreateBuilder(args);
 
 // Add services to container
 builder.Services.AddScoped<IAuthanication, AuthanicationService>();
-builder.Services.AddDbContext<ComputergyDbContext>(option => option.UseSqlServer("Data Source=DESKTOP-D89OGE0\\SQLEXPRESS;Initial Catalog=ComputergyDbTest;Integrated Security=True;Encrypt=True;Trust Server Certificate=True"));
+builder.Services.AddDbContext<ComputergyDbContext>(option => option.UseSqlServer("Data Source=DESKTOP-E4L6533\\SQLEXPRESS;Initial Catalog=ComputergyDb;Integrated Security=True;Encrypt=True;Trust Server Certificate=True"));
 
 // JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
