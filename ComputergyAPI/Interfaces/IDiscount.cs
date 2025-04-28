@@ -5,10 +5,11 @@ namespace ComputergyAPI.Interfaces
 
     public interface IDiscount
     {
-        Task<string> CreateDiscount(DiscountInputDTO input);
-        Task<bool> DeleteDiscount(int discountId);
-        Task<DiscountDTO> GetAllDiscount();
-        Task<string> UpdateDiscount(int discountId, DiscountInputDTO input);
-       
+        public Task<List<DiscountDTO>> GetAllAsync();
+        public Task<DiscountDTO?> GetByIdAsync(int id);
+        public Task<DiscountDTO> CreateAsync(CreateDiscountDTO input);
+        public Task<DiscountDTO?> UpdateAsync(int id, UpdateDiscountDTO input);
+        public Task<bool> DeleteAsync(int id);
+
     }
 }
