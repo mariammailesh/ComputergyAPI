@@ -12,12 +12,6 @@ namespace ComputergyAPI.Services
     {
         private readonly ComputergyDbContext _computergyDbContext;
         private readonly ITokenProvider _tokenProvider;
-        public AuthanicationService(ComputergyDbContext computergyDbContext, ITokenProvider tokenProvider)
-        {
-            _computergyDbContext = computergyDbContext;
-            _tokenProvider = tokenProvider;
-        }
-
 
         private readonly IConfiguration _configuration;
         private readonly SymmetricSecurityKey _key;
@@ -72,29 +66,23 @@ namespace ComputergyAPI.Services
 
         public async Task<string> SignIn(SignInInputDTO input)
         {
-            var user = _computergyDbContext.Persons
-                .Where(u => u.Email == input.Email && u.Password == input.Password && u.IsLogedIn == false)
-                .SingleOrDefault();
-
+            var user = _computergyDbContext.Persons.Where(u => u.Email == input.Email && u.Password == input.Password && u.IsLogedIn == false).SingleOrDefault();
             if (user == null)
+            {
                 return "User not found";
+            }
 
-            // Successful login, mark user as logged in
-            user.IsLogedIn = true;
-            user.LastLoginTime = DateTime.Now;
-            user.OTP = null;
-            user.ExpireOTP = null;
+            Random random = new Random();
+            var otp = random.Next(11111, 99999);
+            user.OTP = otp.ToString();
 
+            user.ExpireOTP = DateTime.Now.AddMinutes(5);
+            //Send code via email
             _computergyDbContext.Update(user);
             _computergyDbContext.SaveChanges();
 
-            return "Check your email OTP has been sent!";
-
-            var token = _jwtTokenGenerator.CreateToken(user);
-            return token;
-
+            return "Check your emnail OTP has been sent!";
         }
-
         public async Task<bool> SignOut(int userId)
         {
             var user = _computergyDbContext.Persons.Where(u => u.Id == userId && u.IsLogedIn == true).SingleOrDefault();
@@ -114,24 +102,23 @@ namespace ComputergyAPI.Services
 
         public async Task<string> SignUp(SignUpInputDTO input)
         {
-            var person = new Person
-            {
-                Email = input.Email,
-                Password = input.Password,
-                FirstName = input.FirstName,
-                LastName = input.LastName,
-                CreatedBy = "System",
-                CreationDate = DateTime.Now,
-                IsVerified = true,   // Direct verify if you want to generate token immediately
-                IsLogedIn = true
-            };
+            Person person = new Person();
+            person.Email = input.Email;
+            person.Password = input.Password;
+            person.FirstName = input.FirstName;
+            person.LastName = input.LastName;
+            person.CreatedBy = "System";
+            person.CreationDate = DateTime.Now;
 
+            Random random = new Random();
+            var otp = random.Next(11111, 99999);
+            person.OTP = otp.ToString();
+
+            person.ExpireOTP = DateTime.Now.AddMinutes(5);
             _computergyDbContext.Persons.Add(person);
             _computergyDbContext.SaveChanges();
-
-            // Generate JWT Token immediately after signup
-            var token = _jwtTokenGenerator.CreateToken(person);
-            return token;
+            // send otp code via email
+            return "Verifuing Your email using otp";
         }
 
 
@@ -147,21 +134,27 @@ namespace ComputergyAPI.Services
             if (input.IsSignup)
             {
                 user.IsVerified = true;
+                user.ExpireOTP = null;
+                user.OTP = null;
+                _computergyDbContext.Update(user);
+                _computergyDbContext.SaveChanges();
+                return "Your Account Is Verifyed";
             }
             else
             {
                 user.LastLoginTime = DateTime.Now;
                 user.IsLogedIn = true;
+                user.ExpireOTP = null;
+                user.OTP = null;
+
+                _computergyDbContext.Update(user);
+                _computergyDbContext.SaveChanges();
+                string jwtToken = _tokenProvider.CreateToken(user);
+
+                return jwtToken;
             }
             
-            user.ExpireOTP = null;
-            user.OTP = null;
-
-            _computergyDbContext.Update(user);
-            _computergyDbContext.SaveChanges();
-            string jwtToken = _tokenProvider.CreateToken(user);
-
-            return jwtToken;
+            
         }
     }
 }
