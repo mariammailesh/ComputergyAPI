@@ -26,10 +26,8 @@
 
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
 
     <Folder Include="Images\" />
-    <Folder Include="Helpers\" />
     <Folder Include="Logs\" />
 
   </ItemGroup>
