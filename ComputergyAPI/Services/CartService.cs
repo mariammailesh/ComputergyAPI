@@ -47,14 +47,26 @@ namespace ComputergyAPI.Services
 
         public async Task<string> ClearCart(int cartId)
         {
-            var cartItem = _computergyDbContext.CartItems.Where(c => c.CartId == cartId).SingleOrDefault();
+            var cartItem = _computergyDbContext.CartItems.Where(c => c.Id == cartId).ToList();
             if (cartItem == null)
             {
                 return "Cart is empty";
             }
-
-            _computergyDbContext.Remove(cartItem);
+            _computergyDbContext.RemoveRange(cartItem);
             _computergyDbContext.SaveChanges();
+
+
+            //var cartItem = _computergyDbContext.Carts.Where(c => c.Id == cartId).SingleOrDefault();
+            //_computergyDbContext.Remove(cartItem);
+
+            //foreach (var item in cartItem)
+            //{
+            //    _computergyDbContext.Remove(item);
+
+            //}
+            //_computergyDbContext.SaveChanges();
+
+
 
             return "Cart Cleared Successfully";
         }
@@ -128,7 +140,7 @@ namespace ComputergyAPI.Services
             }
 
 
-            _computergyDbContext.Remove(wishlist);
+             _computergyDbContext.Remove(wishlist);
             _computergyDbContext.SaveChanges();
 
             return "Wishlist Item Removed Successfully";
