@@ -33,11 +33,11 @@ namespace ComputergyAPI.Controllers
         }
 
         [HttpGet("GetAllPaymentCards")]
-        public async Task<IActionResult> GetAllPaymentCards()
+        public async Task<IActionResult> GetAllPaymentCards(int userId)
         {
             try
             {
-                var result = await _paymentService.GetAll();
+                var result = await _paymentService.GetAll(userId);
                 return Ok(result);
             }
             catch (Exception ex)
