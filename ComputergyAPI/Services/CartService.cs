@@ -47,7 +47,7 @@ namespace ComputergyAPI.Services
 
         public async Task<string> ClearCart(int cartId)
         {
-            var cartItem = _computergyDbContext.CartItems.Where(c => c.CartId == cartId).SingleOrDefault();
+            var cartItem = _computergyDbContext.Carts.Where(c => c.Id == cartId).SingleOrDefault();
             if (cartItem == null)
             {
                 return "Cart is empty";
@@ -128,7 +128,7 @@ namespace ComputergyAPI.Services
             }
 
 
-            _computergyDbContext.Remove(wishlist);
+             _computergyDbContext.Remove(wishlist);
             _computergyDbContext.SaveChanges();
 
             return "Wishlist Item Removed Successfully";

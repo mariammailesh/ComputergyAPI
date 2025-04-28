@@ -18,14 +18,14 @@ namespace ComputergyAPI.Controllers
             _CartServices = CartServices;
         }
 
-        [HttpPost("Create-Cart{psersonId})")]
-        public async Task<IActionResult> CreateCart([FromRoute] int psersonId)
+        [HttpPost("Create-Cart/{personId}")]
+        public async Task<IActionResult> CreateCart([FromRoute] int personId)
         {
             try
             {
-                if (CartitemValidationHelper.IsValidId(psersonId))
+                if (CartitemValidationHelper.IsValidId(personId))
                 {
-                    return Ok(_CartServices.CreateCart(psersonId));
+                    return Ok(await _CartServices.CreateCart(personId));
                 }
                 else
                 {
@@ -83,7 +83,7 @@ namespace ComputergyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
 
