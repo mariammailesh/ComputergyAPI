@@ -7,6 +7,7 @@ namespace ComputergyAPI.Interfaces
         Task<string> CreateUpdateOrder(CreateUpdateOrderInputDTO input);
         Task<string> DeleteOrder(int id);
         Task<OrderDTO> GetAllOrder();
+        Task<OrderDTO?> GetOneOrder(int id);
         Task<OrderDTO> SearchOrder(SearchOrderInputDTO input);
     }
 }
