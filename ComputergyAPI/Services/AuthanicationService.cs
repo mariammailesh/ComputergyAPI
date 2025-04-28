@@ -5,7 +5,7 @@ using ComputergyAPI.Helpers.JWT;
 using ComputergyAPI.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-
+// Hi t
 namespace ComputergyAPI.Services
 {
     public class AuthanicationService : IAuthanication
