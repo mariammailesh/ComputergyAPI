@@ -7,5 +7,7 @@
         public int RateAmount { get; set; }
         public int OrderId { get; set; }
 
+        public int OrderDate { get; set; }
+
     }
 }
