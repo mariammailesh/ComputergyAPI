@@ -16,6 +16,7 @@ namespace ComputergyAPI.Services
         {
             _computergyDbContext = computergyDbContext;
             _tokenProvider = tokenProvider;
+        }
 
 
         private readonly IConfiguration _configuration;

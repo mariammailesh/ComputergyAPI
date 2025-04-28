@@ -1,17 +1,14 @@
-using ComputergyAPI;
 using ComputergyAPI.Contexts;
-
 using ComputergyAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-
 using ComputergyAPI.Interfaces;
-using ComputergyAPI.Services;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-
+using System.Diagnostics;
+using Serilog;
+using ComputergyAPI.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,10 +18,7 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "Computergy API",
-        // Version = "v1",
-        Description = "An API for managing an E-Commerce for computer-related resources for " +
-        "Computergy store. This API provides endpoints for managing products, orders, customers, " +
-        "and inventory. It is designed to be scalable, secure, and easy to integrate with third-party services.",
+        Description = "An API for managing an E-Commerce for computer-related resources for Computergy store. This API provides endpoints for managing products, orders, customers, and inventory. It is designed to be scalable, secure, and easy to integrate with third-party services.",
         TermsOfService = new Uri("https://Computergy.com/terms"),
         Contact = new OpenApiContact
         {
@@ -44,20 +38,6 @@ builder.Services.AddSwaggerGen(options =>
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     options.IncludeXmlComments(xmlPath);
 });
-
-using ComputergyAPI.Interfaces;
-using ComputergyAPI.Services;
-
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-
-using ComputergyAPI.Services;
-using Microsoft.EntityFrameworkCore;
-using Serilog;
-using System.Diagnostics;
-
-var builder = WebApplication.CreateBuilder(args);
 
 // Setup Log file for Debug/Trace output (low-level runtime logs)
 var debugLogFilePath = "Logs/debug-output.txt";
@@ -81,42 +61,11 @@ builder.Host.UseSerilog();
 // Add services
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
-
-builder = WebApplication.CreateBuilder(args);
-
-// Add services to container
-builder.Services.AddScoped<IAuthanication, AuthanicationService>();
+// Add Database Context
 builder.Services.AddDbContext<ComputergyDbContext>(option => option.UseSqlServer("Data Source=DESKTOP-E4L6533\\SQLEXPRESS;Initial Catalog=ComputergyDb;Integrated Security=True;Encrypt=True;Trust Server Certificate=True"));
 
-// JWT Authentication
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        var key = builder.Configuration["JWT:Key"];
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidIssuer = builder.Configuration["JWT:IssuerIP"],
-            ValidAudience = builder.Configuration["JWT:AudienceIP"],
-            ClockSkew = TimeSpan.Zero
-        };
-    });
-
-builder.Services.AddAuthorization();
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-builder.Services.AddDbContext<ComputergyDbContext>(option => option.UseSqlServer("Data Source=DESKTOP-E4L6533\\SQLEXPRESS;Initial Catalog=ComputergyDb;Integrated Security=True;Encrypt=True;Trust Server Certificate=True"));
-
-builder.Services.AddSingleton<TokenProvider>();
-// Add Authentication with JWT
-builder.Services.AddAuthorization();
+// Add Authentication and Authorization with JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -127,26 +76,25 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]!)),
+            ValidIssuer = builder.Configuration["JWT:IssuerIP"],
+            ValidAudience = builder.Configuration["JWT:AudienceIP"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])),
             ClockSkew = TimeSpan.Zero // No extra time allowed after expiration
         };
+    });
 
+builder.Services.AddAuthorization();
 
-
-builder.Services.AddDbContext<ComputergyDbContext>(option =>
-    option.UseSqlServer("Data Source=DESKTOP-E4L6533\\SQLEXPRESS;Initial Catalog=ComputergyDb;Integrated Security=True;Encrypt=True;Trust Server Certificate=True")
-);
+// Add Scoped Services
+builder.Services.AddScoped<IAuthanication, AuthanicationService>();
+builder.Services.AddScoped<IProducts, ProductsService>();
+builder.Services.AddSingleton<TokenProvider>();
 
 // After adding services, log them
 foreach (var service in builder.Services)
 {
     Log.Information($"Service Registered: {service.ServiceType.FullName} -> {service.ImplementationType?.FullName}");
 }
-builder.Services.AddScoped<IProducts, ProductsService>();
-
 
 var app = builder.Build();
 
@@ -156,14 +104,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseHttpsRedirection();
 app.UseMiddleware<ExceptionLoggingMiddleware>();
-app.UseAuthorization();
-
-app.UseAuthentication();
-
 
 app.MapControllers();
 
@@ -175,8 +120,11 @@ try
 {
     app.Run();
 }
+catch (Exception ex)
+{
+    Log.Error($"An Error Was Occured While Start Up {ex.Message}");
+}
 finally
 {
     Log.CloseAndFlush(); // VERY important to ensure logs are written!
 }
-

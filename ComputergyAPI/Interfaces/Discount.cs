@@ -1,4 +1,5 @@
-﻿using ComputergyAPI.Services;
+﻿using ComputergyAPI.Entites;
+using ComputergyAPI.Services;
 
 namespace ComputergyAPI.Interfaces
 {
