@@ -2,10 +2,11 @@
 using ComputergyAPI.DTOs.Authications;
 using ComputergyAPI.Entites;
 using ComputergyAPI.Helpers.JWT;
+using ComputergyAPI.Helpers.SendEmailWithSendGrid;
 using ComputergyAPI.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-// Hi t
+using System;
 namespace ComputergyAPI.Services
 {
     public class AuthanicationService : IAuthanication
@@ -16,12 +17,13 @@ namespace ComputergyAPI.Services
         private readonly IConfiguration _configuration;
         private readonly SymmetricSecurityKey _key;
         private readonly GenerateJwtToken _jwtTokenGenerator;
+        private readonly SendEmailWithSendGrid _sendEmailService;
 
-        public AuthanicationService(ComputergyDbContext computergyDbContext, IConfiguration configuration)
+        public AuthanicationService(ComputergyDbContext computergyDbContext, IConfiguration configuration, SendEmailWithSendGrid sendEmailService)
         {
             _computergyDbContext = computergyDbContext;
             _jwtTokenGenerator = new GenerateJwtToken(configuration);
-
+            _sendEmailService = sendEmailService;
         }
 
         public async Task<bool> ResetPersonPassword(ResetPersonPasswordInputDTO input)
@@ -48,20 +50,37 @@ namespace ComputergyAPI.Services
 
         public async Task<bool> SendOTP(string email)
         {
-            var user = _computergyDbContext.Persons.Where(u => u.Email == email && u.IsLogedIn == false).SingleOrDefault();
-            if (user == null)
+            try
             {
+                var user = _computergyDbContext.Persons.Where(u => u.Email == email && u.IsLogedIn == false).SingleOrDefault();
+                if (user == null)
+                {
+                    return false;
+                }
+                Random otp = new Random();
+                user.OTP = otp.Next(11111, 99999).ToString();
+                user.ExpireOTP = DateTime.Now.AddMinutes(3);
+                //send otp via email
+                await _sendEmailService.SendEmailAsync(
+                   toEmail: user.Email,
+                   toName: $"{user.FirstName} {user.LastName}",
+                   subject: "Your Verification OTP Code",
+                   plainText: $"Your OTP code is {user.OTP}",
+                   htmlContent: $"<strong>Your OTP code is {user.OTP}</strong>"
+               );
+
+                //send otp via email
+
+                _computergyDbContext.Update(user);
+                _computergyDbContext.SaveChanges();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+
                 return false;
             }
-            Random otp = new Random();
-            user.OTP = otp.Next(11111, 99999).ToString();
-            user.ExpireOTP = DateTime.Now.AddMinutes(3);
-            //send otp via email
-
-            _computergyDbContext.Update(user);
-            _computergyDbContext.SaveChanges();
-
-            return true;
         }
 
         public async Task<string> SignIn(SignInInputDTO input)
@@ -121,7 +140,6 @@ namespace ComputergyAPI.Services
             return "Verifuing Your email using otp";
         }
 
-
         public async Task<string> Verification(VerificationInputDTO input)
         {
             var user = _computergyDbContext.Persons.Where(u => u.Email == input.Email && u.OTP == input.OTPCode 
@@ -153,8 +171,7 @@ namespace ComputergyAPI.Services
 
                 return jwtToken;
             }
-            
-            
+
         }
     }
 }

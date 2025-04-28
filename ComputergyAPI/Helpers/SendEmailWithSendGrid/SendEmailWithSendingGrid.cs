@@ -1,9 +1,8 @@
-﻿using SendGrid;
-using SendGrid.Helpers.Mail;
+﻿using SendGrid.Helpers.Mail;
+using SendGrid;
 
-namespace ComputergyAPI.Services
+namespace ComputergyAPI.Helpers.SendEmailWithSendGrid
 {
-   
         public class SendEmailWithSendGrid
         {
             private readonly SendGridClient _sendGridClient;
@@ -11,7 +10,6 @@ namespace ComputergyAPI.Services
             private readonly ILogger<SendEmailWithSendGrid> _logger;
 
             public SendEmailWithSendGrid(
-
 
                 SendGridClient sendGridClient,
                 IConfiguration configuration,
@@ -41,5 +39,6 @@ namespace ComputergyAPI.Services
 
                 _logger.LogInformation($"Email sent successfully to {toEmail} with subject '{subject}'");
             }
-        }
+
     }
+}
