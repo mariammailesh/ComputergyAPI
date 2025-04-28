@@ -28,6 +28,7 @@ namespace ComputergyAPI.Controllers
             {
                 return StatusCode(500, ex.Message);
 
+
             }
             
         }
