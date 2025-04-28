@@ -79,7 +79,7 @@ namespace ComputergyAPI.Services
             return await _computergyDbContext
                 .Products
                 .AsQueryable()
-                .Where(p => p.ProductName.Contains(input.Name, StringComparison.OrdinalIgnoreCase))
+                .Where(p => p.ProductName.Contains(input.ProductName, StringComparison.OrdinalIgnoreCase))
                 .Select(p => p.ToProductDTO())
                 .ToListAsync();
         }

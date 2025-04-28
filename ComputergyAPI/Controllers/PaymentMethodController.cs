@@ -19,32 +19,65 @@ namespace ComputergyAPI.Controllers
         [HttpPost("create-update")]
         public async Task<IActionResult> CreateUpdatePaymentCard([FromBody] CreateUpdatePaymentCardDTO input)
         {
-            var result = await _paymentService.CreateUpdatePaymentCard(input);
-            return Ok(result);
+            try
+            {
+                var result = await _paymentService.CreateUpdatePaymentCard(input);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+
+            }
+            
         }
 
         [HttpGet("GetAllPaymentCards")]
-        public async Task<IActionResult> GetAllPaymentCards(int userId)
+        public async Task<IActionResult> GetAllPaymentCards()
         {
-            var result = await _paymentService.GetAll(userId);
-            return Ok(result);
+            try
+            {
+                var result = await _paymentService.GetAll();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+            
         }
 
         [HttpGet("{cardId}")]
         public async Task<IActionResult> GetPaymentCard(int cardId)
         {
-            var result = await _paymentService.GetPaymentCard(cardId);
-            return Ok(result);
+            try
+            {
+                var result = await _paymentService.GetPaymentCard(cardId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+            
         }
 
         [HttpDelete("{cardId}")]
         public async Task<IActionResult> RemovePaymentCard(int cardId)
         {
-            var result = await _paymentService.RemovePaymentCard(cardId);
-            if (result)
-                return Ok("Payment card removed successfully.");
-            else
-                return BadRequest("Failed to remove payment card.");
+            try
+            {
+                var result = await _paymentService.RemovePaymentCard(cardId);
+                if (result)
+                    return Ok("Payment card removed successfully.");
+                else
+                    return BadRequest("Failed to remove payment card.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+            
         }
     }
 }

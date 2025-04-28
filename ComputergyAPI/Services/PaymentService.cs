@@ -1,9 +1,11 @@
 ﻿using ComputergyAPI.Contexts;
+using ComputergyAPI.DTOs.Discount;
 using ComputergyAPI.DTOs.Payment;
 using ComputergyAPI.Entites;
 using ComputergyAPI.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using SendGrid.Helpers.Mail;
 
 namespace ComputergyAPI.Services
 {
@@ -16,8 +18,7 @@ namespace ComputergyAPI.Services
         }
         public async Task<string> CreateUpdatePaymentCard(CreateUpdatePaymentCardDTO input)
         {
-            try
-            {
+            
                 if (input == null)
                     throw new ArgumentNullException(nameof(input));
 
@@ -51,37 +52,21 @@ namespace ComputergyAPI.Services
 
                     return "Payment card updated successfully.";
                 }
-            }
-            catch (Exception ex)
-            {
-                return $"An error occurred: {ex.Message}";
-            }
         }
 
-        public async Task<List<GetAllPaymentCardsDTO>> GetAll(int userId)
+        public async Task<List<CardDTO>> GetAll()
         {
-            try
-            {
-                if (userId <= 0)
-                    throw new ArgumentException("Invalid UserId", nameof(userId));
-                var cards = await _computergyDbContext.PaymentCards
-                    .Where(x => x.UserId == userId)
-                    .ToListAsync();
+            var getPayment = _computergyDbContext.PaymentCards.ToList();
 
-                var paymentDtos = cards.Select(card => new GetAllPaymentCardsDTO
-                {
-                    UserId = card.UserId,
-                    CardHolder = card.CardHolder,
-                    CardNumber = card.CardNumber,
-                    ExpirationDate = card.ExpirationDate,
-                }).ToList();
-
-                return paymentDtos;
-            }
-            catch (Exception ex)
+            var payment = getPayment.Select(d => new CardDTO
             {
-                throw new Exception($"An error occurred while fetching payment cards: {ex.Message}", ex);
-            }
+                CardHolder = d.CardHolder,
+                CardNumber= d.CardNumber,
+                ExpirationDate= d.ExpirationDate,
+                CVC = d.CVC,
+                UserId = d.UserId
+            }).ToList();
+            return payment;
         }
 
 
@@ -112,7 +97,7 @@ namespace ComputergyAPI.Services
         public async Task<bool> RemovePaymentCard(int cardId)
         {
             if (cardId <= 0)
-                throw new ArgumentException("Invalid Card Id", nameof(cardId));
+                throw new Exception("Invalid ID");
 
             var card = await _computergyDbContext.PaymentCards
                 .FirstOrDefaultAsync(x => x.Id == cardId);
