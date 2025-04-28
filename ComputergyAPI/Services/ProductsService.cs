@@ -9,6 +9,7 @@ using ComputergyAPI.DTOs;
 
 namespace ComputergyAPI.Services
 {
+
     public class ProductsService : IProducts
     {
         private readonly ComputergyDbContext _computergyDbContext;
@@ -48,9 +49,9 @@ namespace ComputergyAPI.Services
             }
             product.ProductName = dto.ProductName;
             product.ProductDescription = dto.ProductDescription;
-            product.Price = dto.Price;
+            product.Price = (float)dto.Price ;
             product.ImageUrl = dto.ImageUrl;
-            product.Quantity = dto.Quantity;
+            product.Quantity =(int) dto.Quantity;
             product.Category = dto.Category;
             product.Brand = dto.Brand;
 
@@ -67,12 +68,23 @@ namespace ComputergyAPI.Services
               .Select(p => p.ToProductDTO())
               .ToListAsync();
         }
-        public async Task<ProductDTO?> GetOneProduct(int id)
+        public async Task<ProductDetailsDTOcs?> GetOneProduct(int id)
         {
-            var existing = await _computergyDbContext.Products.FindAsync(id);
-            if (existing is null)
-                return null;
-            return existing.ToProductDTO();
+             var product=await _computergyDbContext.Products
+        .Where(p => p.Id == id)
+        .Select(p => new ProductDetailsDTOcs
+        {
+            ProductName = p.ProductName,
+            ProductDescription = p.ProductDescription,
+            Price = p.Price,
+            ImageUrl = p.ImageUrl,
+            Quantity = p.Quantity,
+            Category = p.Category,
+            Brand = p.Brand
+        })
+        .SingleOrDefaultAsync();
+
+            return product;
         }
         public async Task<List<ProductDTO>> SearchProduct(SearchInputProductsDTO input)
         {

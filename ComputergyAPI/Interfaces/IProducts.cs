@@ -10,7 +10,7 @@ namespace ComputergyAPI.Interfaces
         Task<ProductDTO?> UpdateProduct(ProductUpdateDTO dto);
         Task<bool> RemoveProduct(int id);
         Task<List<ProductDTO>> GetAllProducts(PaginationParameters pagination);
-        Task<ProductDTO?> GetOneProduct(int id);
+        Task<ProductDetailsDTOcs> GetOneProduct(int id);
         Task<List<ProductDTO>> SearchProduct(SearchInputProductsDTO input);
     }
 }

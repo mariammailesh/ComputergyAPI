@@ -7,7 +7,6 @@ using ComputergyAPI.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
-
 namespace ComputergyAPI.Services
 {
     public class AuthanicationService : IAuthanication

@@ -17,34 +17,77 @@ namespace ComputergyAPI.Controllers
         }
 
         [HttpPost("Create-Discount")]
-        public async Task<IActionResult> CreateDiscount([FromBody] DiscountInputDTO input)
+        public async Task<IActionResult> CreateDiscount([FromBody] CreateDiscountDTO input)
         {
-            var result = await _discountService.CreateDiscount(input);
-            return Ok(result);
+            try
+            {
+                var result = await _discountService.CreateAsync(input);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("Get-allDiscounts")]
         public async Task<IActionResult> GetAllDiscounts()
         {
-            var discounts = await _discountService.GetAllDiscount();
-            return Ok(discounts);
+            try
+            {
+                var discounts = await _discountService.GetAllAsync();
+                return Ok(discounts);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        [HttpPut("Update Discount/{id}")]
-        public async Task<IActionResult> UpdateDiscount(int id, [FromBody] DiscountInputDTO input)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
-            var result = await _discountService.UpdateDiscount(id, input);
-            return Ok(result);
+            try
+            {
+                var existing = await _discountService.GetByIdAsync(id);
+                return existing is null ? NotFound() : Ok(existing);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPut("Update Discount/{id}")]
+        public async Task<IActionResult> UpdateDiscount(int id, [FromBody] UpdateDiscountDTO input)
+        {
+            try
+            {
+                var result = await _discountService.UpdateAsync(id, input);
+                if (result is null)
+                    return NotFound();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        [HttpDelete("Detete-Discount/{id}")]
+        [HttpDelete("Delete-Discount/{id}")]
         public async Task<IActionResult> DeleteDiscount(int id)
         {
-            var result = await _discountService.DeleteDiscount(id);
-            if (!result)
-                return NotFound("Discount not found");
+            try
+            {
+                var result = await _discountService.DeleteAsync(id);
+                if (!result)
+                    return NotFound("Discount not found");
 
-            return Ok("Discount deleted successfully");
+                return Ok("Discount deleted successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

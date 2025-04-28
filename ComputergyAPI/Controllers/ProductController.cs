@@ -35,7 +35,7 @@ namespace ComputergyAPI.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet(" get-product-Details{id}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             try
@@ -62,11 +62,6 @@ namespace ComputergyAPI.Controllers
             }
         }
 
-        public ProductController(ProductsService _productsService)
-        {
-            this._productsService = _productsService;
-        }
-
 
         [HttpPost]
         [Route("Create new Product")]
@@ -74,11 +69,11 @@ namespace ComputergyAPI.Controllers
         {
             try
             {
-                return Ok( _productsService.CreateProduct(dto));
+                return Ok(_productsService.CreateProduct(dto));
             }
             catch (Exception ex)
             {
-                return StatusCode(500,ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
 

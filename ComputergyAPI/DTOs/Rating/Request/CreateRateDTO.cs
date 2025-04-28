@@ -6,5 +6,6 @@
         public int OrderId { get; set; }
         public string Massege { get; set; }
         public int RateAmount { get; set; }
+
     }
 }
