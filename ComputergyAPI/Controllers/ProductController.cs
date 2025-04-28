@@ -35,7 +35,7 @@ namespace ComputergyAPI.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet(" get-product-Details{id}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             try
