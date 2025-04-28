@@ -18,7 +18,7 @@ namespace ComputergyAPI.Contexts
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<Wishlist> Wishlists { get; set; }
         public DbSet<PaymentCard> PaymentCards { get; set; }
-        public DbSet<Discount> Discount { get; set; }
+        public DbSet<Discount> Discounts { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Rate> Rate { get; set; }
        
