@@ -44,6 +44,9 @@ namespace ComputergyAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("ExpireOTP")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -54,6 +57,9 @@ namespace ComputergyAPI.Migrations
                     b.Property<bool>("IsLogedIn")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("LastLoginTime")
                         .HasColumnType("datetime2");
 
@@ -62,6 +68,9 @@ namespace ComputergyAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nationality")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OTP")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
@@ -80,9 +89,13 @@ namespace ComputergyAPI.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("UserType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Persons");
+                    b.ToTable("Persons", (string)null);
                 });
 #pragma warning restore 612, 618
         }
