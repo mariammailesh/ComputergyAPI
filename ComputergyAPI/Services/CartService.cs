@@ -83,7 +83,7 @@ namespace ComputergyAPI.Services
             Entites.Wishlist wishlist = new Entites.Wishlist();
             wishlist.ClientId = personId;
 
-            _computergyDbContext.Update(wishlist);
+            _computergyDbContext.Add(wishlist);//
             _computergyDbContext.SaveChanges();
             return "Wishlist Created Successfully";
         }
@@ -96,7 +96,7 @@ namespace ComputergyAPI.Services
                 return "Wishlists does not exist";
             }
 
-            var wishlist = _computergyDbContext.Wishlists.Where(x => x.ClientId == personId).SingleOrDefault();
+            var wishlist = _computergyDbContext.Wishlists.Where(x => x.ClientId == personId).FirstOrDefault();//
             _computergyDbContext.Remove(wishlist);
             _computergyDbContext.SaveChanges();
 
@@ -121,7 +121,7 @@ namespace ComputergyAPI.Services
 
         public async Task<string> RemoveFromWishlist(int itemId)
         {
-            var wishlist = _computergyDbContext.Wishlists.Where(c => c.ItemsID == itemId).SingleOrDefault();
+            var wishlist = _computergyDbContext.Wishlists.Where(c => c.ItemsID == itemId).FirstOrDefault();//
             if (wishlist == null)
             {
                 return "Item does not exist";
