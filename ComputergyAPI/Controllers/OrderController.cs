@@ -16,6 +16,7 @@ namespace ComputergyAPI.Controllers
         {
             _service = service;
         }
+        [HttpPost("[action]")]
         public async Task<IActionResult> CreateUpdateOrder(CreateUpdateOrderInputDTO input)
         {
             try
@@ -30,6 +31,7 @@ namespace ComputergyAPI.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+        [HttpPost("[action]")]
         public async Task<IActionResult> DeleteOrder(int id)
         {
             try
@@ -44,6 +46,7 @@ namespace ComputergyAPI.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+        [HttpGet("[action]")]
         public async Task<IActionResult> GetAllOrder()
         {
             try
@@ -58,6 +61,7 @@ namespace ComputergyAPI.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+        [HttpGet("[action]")]
         public async Task<IActionResult?> GetOneOrder(int id)
         {
             try
@@ -72,6 +76,7 @@ namespace ComputergyAPI.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+        [HttpGet("[action]")]
         public async Task<IActionResult> SearchOrder(SearchOrderInputDTO input)
         {
             try

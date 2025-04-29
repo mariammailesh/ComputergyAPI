@@ -10,7 +10,7 @@ namespace ComputergyAPI.Controllers
     {
 
         [HttpPost("upload")]
-        public async Task<IActionResult> Upload([FromForm] IFormFile file)
+        public async Task<IActionResult> Upload(IFormFile file)
         {
             try
             {

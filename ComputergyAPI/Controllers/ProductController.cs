@@ -22,7 +22,7 @@ namespace ComputergyAPI.Controllers.AuthenticationController
             _productsService = productsService;
         }
 
-        [HttpGet]
+        [HttpGet("[action]")]
         public async Task<IActionResult> GetAll([FromQuery] PaginationParameters pagination)
         {
             try

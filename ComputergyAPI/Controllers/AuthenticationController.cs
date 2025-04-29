@@ -53,6 +53,7 @@ namespace ComputergyAPI.Controllers.AuthenticationController
             }
 
         }
+        [HttpPost("[action]")]
         public async Task<IActionResult> Verification(VerificationInputDTO input)
         {
             try
@@ -67,6 +68,7 @@ namespace ComputergyAPI.Controllers.AuthenticationController
                 return StatusCode(500, ex.Message);
             }
         }
+        [HttpPost("[action]")]
         public async Task<IActionResult> SendOTP(string email)
         {
             try
@@ -81,6 +83,7 @@ namespace ComputergyAPI.Controllers.AuthenticationController
                 return StatusCode(500, ex.Message);
             }
         }
+        [HttpPost("[action]")]
         public async Task<IActionResult> ResetPersonPassword(ResetPersonPasswordInputDTO input)
         {
             try
@@ -95,6 +98,7 @@ namespace ComputergyAPI.Controllers.AuthenticationController
                 return StatusCode(500, ex.Message);
             }
         }
+        [HttpPost("[action]")]
         public async Task<IActionResult> SignOut(int userId)
         {
             try

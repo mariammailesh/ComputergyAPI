@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using System.Diagnostics;
 using Serilog;
 using ComputergyAPI.Helpers;
+using ComputergyAPI.Helpers.SendEmailWithSendGrid;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -88,8 +89,8 @@ builder.Services.AddAuthorization();
 // Add Scoped Services
 builder.Services.AddScoped<IAuthanication, AuthanicationService>();
 builder.Services.AddScoped<IProducts, ProductsService>();
-builder.Services.AddSingleton<TokenProvider>();
-
+builder.Services.AddScoped<TokenProvider>();
+builder.Services.AddTransient<SendEmailWithSendGrid>();
 // After adding services, log them
 foreach (var service in builder.Services)
 {

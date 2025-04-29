@@ -61,13 +61,13 @@ namespace ComputergyAPI.Services
                 user.OTP = otp.Next(11111, 99999).ToString();
                 user.ExpireOTP = DateTime.Now.AddMinutes(3);
                 //send otp via email
-                await _sendEmailService.SendEmailAsync(
+                /*await _sendEmailService.SendEmailAsync(
                    toEmail: user.Email,
                    toName: $"{user.FirstName} {user.LastName}",
                    subject: "Your Verification OTP Code",
                    plainText: $"Your OTP code is {user.OTP}",
                    htmlContent: $"<strong>Your OTP code is {user.OTP}</strong>"
-               );
+               );*/
 
                 //send otp via email
 
