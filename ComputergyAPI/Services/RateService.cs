@@ -37,13 +37,13 @@ namespace ComputergyAPI.Services
 
         public async Task<List<GetRateDTO>> GetRateByOrderID(int id)
         {
-            var rates = _computergyDbContext.Rate.Where(x => x.OrderId == id).SingleOrDefault();
+            var rates = _computergyDbContext.Rates.Where(x => x.OrderId == id).SingleOrDefault();
             if (rates == null)
             {
                 throw new Exception("Wrong ID");
             }
-            var getRate = (from rate in _computergyDbContext.Rate
-                           join order in _computergyDbContext.Order
+            var getRate = (from rate in _computergyDbContext.Rates
+                           join order in _computergyDbContext.Orders
                            on rate.OrderId equals order.Id
                            select new GetRateDTO
                            {

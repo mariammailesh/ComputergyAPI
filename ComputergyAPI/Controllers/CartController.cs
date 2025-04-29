@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ComputergyAPI.DTOs.Carts;
 
-namespace ComputergyAPI.Controllers
+namespace ComputergyAPI.Controllers.AuthenticationController
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -34,7 +34,7 @@ namespace ComputergyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);  
+                return StatusCode(500, ex.Message);  
             }
         }
         [HttpPost("Add-Update-Cart{item}")]
@@ -53,7 +53,7 @@ namespace ComputergyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
         [HttpDelete("Remove-Item{itemId}")]
@@ -68,7 +68,7 @@ namespace ComputergyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
         [HttpDelete("Clear-Cart{cartId}")]
@@ -83,7 +83,7 @@ namespace ComputergyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
 

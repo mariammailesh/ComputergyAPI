@@ -20,7 +20,7 @@ namespace ComputergyAPI.Contexts
         public DbSet<PaymentCard> PaymentCards { get; set; }
         public DbSet<Discount> Discounts { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<Rate> Rate { get; set; }
+        public DbSet<Rate> Rates { get; set; }
        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

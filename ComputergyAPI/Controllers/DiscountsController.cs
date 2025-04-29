@@ -26,7 +26,7 @@ namespace ComputergyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -40,7 +40,7 @@ namespace ComputergyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -54,7 +54,7 @@ namespace ComputergyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
         [HttpPut("Update Discount/{id}")]
@@ -69,8 +69,9 @@ namespace ComputergyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
+
         }
 
         [HttpDelete("Delete-Discount/{id}")]
@@ -86,7 +87,7 @@ namespace ComputergyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
     }

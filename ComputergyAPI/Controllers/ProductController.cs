@@ -9,7 +9,7 @@ using ComputergyAPI.Interfaces;
 using ComputergyAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ComputergyAPI.Controllers
+namespace ComputergyAPI.Controllers.AuthenticationController
 {
     [ApiController]
     [Route("api/product")]
@@ -31,7 +31,7 @@ namespace ComputergyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -45,7 +45,7 @@ namespace ComputergyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -58,7 +58,7 @@ namespace ComputergyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
 

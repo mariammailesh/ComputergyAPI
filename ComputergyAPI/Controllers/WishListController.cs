@@ -16,10 +16,10 @@ namespace ComputergyAPI.Controllers
         {
             _WishListServices = CartServices;
         }
-        [HttpPost("Create-WishList/{personId}")]//
+        [HttpPost("Create-WishList/{personId}")]
         public async Task<IActionResult> CreateWishlist([FromRoute] int personId)
         {
-            try//
+            try
             {
                 if (!CartitemValidationHelper.IsValidId(personId))
                     throw new Exception("Person Id is invalid. Id must be greater than zero.");
@@ -29,10 +29,10 @@ namespace ComputergyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);  
+                return StatusCode(500, ex.Message);  
             }
         }
-        [HttpPost("Add-To-WishList")]//{itemId}
+        [HttpPost("Add-To-WishList")]
         public async Task<IActionResult> AddToWishlist([FromBody] WishListDTO wishListDTO)
         {
             try
@@ -44,22 +44,22 @@ namespace ComputergyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
-        [HttpDelete("Remove-Item-FromWishlist{itemId}")]//
+        [HttpDelete("Remove-Item-FromWishlist/{itemId}")]
         public async Task<IActionResult> RemoveFromWishlist([FromRoute] int itemId)
         {
             try
             {
                 if(CartitemValidationHelper.IsValidId(itemId))
-                    return Ok(await _WishListServices.RemoveFromWishlist(itemId));//
+                    return Ok(await _WishListServices.RemoveFromWishlist(itemId));
 
                 throw new Exception("Invalid Item Id, Id Must Be Greater Then Zero");
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
         [HttpDelete("Delete-WishList/{personId}")]
@@ -74,7 +74,7 @@ namespace ComputergyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
     }

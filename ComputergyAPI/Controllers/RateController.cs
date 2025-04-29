@@ -16,6 +16,7 @@ namespace ComputergyAPI.Controllers
         {
             _rateService = rateService;
         }
+
         [HttpPost("CreateRate")]
         public async Task<IActionResult> CreateRate(CreateRateDTO input)
         {

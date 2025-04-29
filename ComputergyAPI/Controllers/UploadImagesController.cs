@@ -14,6 +14,7 @@ namespace ComputergyAPI.Controllers
         {
             try
             {
+
                 if (file == null || file.Length == 0)
                     return BadRequest(new { Message = "No file uploaded." });
 
