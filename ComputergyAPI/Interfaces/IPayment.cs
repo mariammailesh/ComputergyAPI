@@ -9,7 +9,7 @@ namespace ComputergyAPI.Interfaces
         public Task<bool> RemovePaymentCard(int CardId);
 
         public Task<CardDTO> GetPaymentCard(int CardId);
-        public Task<List<GetAllPaymentCardsDTO>> GetAll(int UserId);
+        public Task<List<CardDTO>> GetAll(int userID);
 
 
 

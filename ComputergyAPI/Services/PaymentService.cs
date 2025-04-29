@@ -1,9 +1,11 @@
 ﻿using ComputergyAPI.Contexts;
+using ComputergyAPI.DTOs.Discount;
 using ComputergyAPI.DTOs.Payment;
 using ComputergyAPI.Entites;
 using ComputergyAPI.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using SendGrid.Helpers.Mail;
 
 namespace ComputergyAPI.Services
 {
@@ -54,76 +56,96 @@ namespace ComputergyAPI.Services
             }
             catch (Exception ex)
             {
-                return $"An error occurred: {ex.Message}";
+                return ex.Message;
             }
+            
+               
         }
 
-        public async Task<List<GetAllPaymentCardsDTO>> GetAll(int userId)
+        public async Task<List<CardDTO>> GetAll(int userID)
         {
             try
             {
-                if (userId <= 0)
-                    throw new ArgumentException("Invalid UserId", nameof(userId));
-                var cards = await _computergyDbContext.PaymentCards
-                    .Where(x => x.UserId == userId)
-                    .ToListAsync();
-
-                var paymentDtos = cards.Select(card => new GetAllPaymentCardsDTO
+                if (userID <= 0)
                 {
-                    UserId = card.UserId,
-                    CardHolder = card.CardHolder,
-                    CardNumber = card.CardNumber,
-                    ExpirationDate = card.ExpirationDate,
-                }).ToList();
+                    throw new Exception("InvalidID");
+                }
 
-                return paymentDtos;
+                var getPayment = _computergyDbContext.PaymentCards.ToList();
+
+                var payment = getPayment.Select(d => new CardDTO
+                {
+                    CardHolder = d.CardHolder,
+                    CardNumber = d.CardNumber,
+                    ExpirationDate = d.ExpirationDate,
+                    CVC = d.CVC,
+                    UserId = d.UserId
+                }).ToList();
+                return payment;
             }
             catch (Exception ex)
             {
-                throw new Exception($"An error occurred while fetching payment cards: {ex.Message}", ex);
+                throw new Exception($"An error occurred while fetching payment cards: {ex.Message}");
             }
+           
         }
 
 
         public async Task<CardDTO> GetPaymentCard(int cardId)
         {
-            if (cardId <= 0)
-                throw new ArgumentException("Invalid Card Id", nameof(cardId));
-
-            var card = await _computergyDbContext.PaymentCards
-                .Where(x => x.Id == cardId)
-                .SingleOrDefaultAsync();
-
-            if (card == null)
-                throw new KeyNotFoundException($"Card with Id {cardId} not found.");
-
-            var Card = new CardDTO
+            try
             {
-                CardNumber = card.CardNumber,
-                ExpirationDate = card.ExpirationDate,
-                CardHolder = card.CardHolder,
-                CVC = card.CVC,
-                UserId = card.UserId
-            };
+                if (cardId <= 0)
+                    throw new ArgumentException("Invalid Card Id", nameof(cardId));
 
-            return Card;
+                var card = await _computergyDbContext.PaymentCards
+                    .Where(x => x.Id == cardId)
+                    .SingleOrDefaultAsync();
+
+                if (card == null)
+                    throw new KeyNotFoundException($"Card with Id {cardId} not found.");
+
+                var Card = new CardDTO
+                {
+                    CardNumber = card.CardNumber,
+                    ExpirationDate = card.ExpirationDate,
+                    CardHolder = card.CardHolder,
+                    CVC = card.CVC,
+                    UserId = card.UserId
+                };
+
+                return Card;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while fetching payment cards: {ex.Message}");
+            }
+           
         }
 
         public async Task<bool> RemovePaymentCard(int cardId)
         {
-            if (cardId <= 0)
-                throw new ArgumentException("Invalid Card Id", nameof(cardId));
+            try
+            {
+                if (cardId <= 0)
+                    throw new Exception("Invalid ID");
 
-            var card = await _computergyDbContext.PaymentCards
-                .FirstOrDefaultAsync(x => x.Id == cardId);
+                var card = await _computergyDbContext.PaymentCards
+                    .FirstOrDefaultAsync(x => x.Id == cardId);
 
-            if (card == null)
-                throw new KeyNotFoundException($"Payment card with Id {cardId} not found.");
+                if (card == null)
+                    throw new KeyNotFoundException($"Payment card with Id {cardId} not found.");
 
-            _computergyDbContext.PaymentCards.Remove(card);
-            await _computergyDbContext.SaveChangesAsync();
+                _computergyDbContext.PaymentCards.Remove(card);
+                await _computergyDbContext.SaveChangesAsync();
 
-            return true;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            
         }
 
     }
