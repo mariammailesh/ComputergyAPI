@@ -160,14 +160,4 @@ This interface allows you to explore the available endpoints, understand request
 
 Contributions are welcome! Please follow the standard GitHub flow: fork the repository, create a feature branch, make your changes, and open a pull request.
 
-## 📄 License
 
-This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
-
-## 📬 Contact
-
-If you have any questions or need support, please reach out to the Support Team:
-
-*   **Email:** [support@computergy.com](mailto:support@computergy.com)
-*   **Website:** [https://computergy.com/contact](https://computergy.com/contact)
-*   **Terms of Service:** [https://Computergy.com/terms](https://Computergy.com/terms)
